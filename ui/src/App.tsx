@@ -3,6 +3,7 @@ import './App.css';
 import { Layout } from 'antd';
 import Header from './components/Header';
 import Content from './components/Content';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
       <Layout.Content style={{ padding: '10px' }}>
         <Content />
       </Layout.Content>
-      <Layout.Footer>footer</Layout.Footer>
+      <Layout.Footer>
+        <Footer />
+      </Layout.Footer>
     </Layout>
   );
 }
