@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
+
 import { Row, Grid, Spin, Typography, Empty } from 'antd';
 
 import DeleteModal from './DeleteModal';
@@ -7,10 +7,13 @@ import ColorCard from './ColorCard';
 import { useQuery } from '@apollo/client';
 import { getAllColors } from '../../queries/queries';
 const { useBreakpoint } = Grid;
-interface Color {
-  id: number;
+
+interface ColorBase {
   name: string;
   hex: string;
+}
+interface Color extends ColorBase {
+  id: number;
 }
 interface ColorData {
   colors: Color[];
@@ -19,13 +22,13 @@ const ColorList = () => {
   const screens = useBreakpoint();
 
   const [visible, setVisible] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState({ name: '', hex: '' });
+  const [itemToDelete, setItemToDelete] = useState<ColorBase | null>(null);
   const onClose = useCallback(() => {
     setVisible(false);
   }, [setVisible]);
 
   const onOpen = useCallback(
-    (item) => {
+    (item: ColorBase) => {
       setVisible(true);
       setItemToDelete(item);
     },
@@ -43,14 +46,16 @@ const ColorList = () => {
 
   return (
     <Row gutter={[16, 16]} justify={!screens.md ? 'center' : undefined}>
-      <DeleteModal
-        visible={visible}
-        itemToDelete={itemToDelete}
-        onClose={onClose}
-      />
+      {itemToDelete && (
+        <DeleteModal
+          visible={visible}
+          itemToDelete={itemToDelete}
+          onClose={onClose}
+        />
+      )}
       {colors.length === 0 ? (
         <Row style={{ width: '100%' }} justify="center">
-          <Empty description="Let's add some colors" />
+          <Empty description="Let's add some" />
         </Row>
       ) : (
         colors?.map((item) => (
@@ -60,7 +65,5 @@ const ColorList = () => {
     </Row>
   );
 };
-
-ColorList.propTypes = {};
 
 export default ColorList;

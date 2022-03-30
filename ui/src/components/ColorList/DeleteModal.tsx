@@ -22,9 +22,6 @@ const DeleteModal: React.FC<Props> = ({ visible, itemToDelete, onClose }) => {
   );
 
   useEffect(() => {
-    console.log('====================================');
-    console.log('RENDER');
-    console.log('====================================');
     if (data && data.deleteColor) {
       reset();
       onClose();

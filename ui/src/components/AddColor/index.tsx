@@ -1,21 +1,33 @@
-import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Modal, notification, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { ADD_NEW_COLOR } from '../../mutations';
 import { getAllColors } from '../../queries/queries';
 
-const AddColor = () => {
+interface Color {
+  name: string;
+  hex: string;
+}
+
+interface ColorData {
+  id: number;
+  name: string;
+  hex: string;
+}
+
+interface ColorDataResponse {
+  addNewColor: ColorData;
+}
+
+const AddColor: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
-  const counter = useRef(0);
-  const [addColor, { loading, data, error, reset }] = useMutation(
-    ADD_NEW_COLOR,
-    {
+
+  const [addColor, { loading, data, error, reset }] =
+    useMutation<ColorDataResponse>(ADD_NEW_COLOR, {
       refetchQueries: [getAllColors],
-    }
-  );
+    });
 
   useEffect(() => {
     if (data && data.addNewColor) {
@@ -43,7 +55,7 @@ const AddColor = () => {
         icon={<PlusOutlined />}
         loading={loading}
       >
-        Add Color {counter.current++}
+        Add Color
       </Button>
       <Modal
         visible={visible}
@@ -63,7 +75,7 @@ const AddColor = () => {
           name="basic"
           layout="vertical"
           initialValues={{ hex: '#fff' }}
-          onFinish={(val) =>
+          onFinish={(val: Color) =>
             addColor({ variables: { name: val.name, hex: val.hex } })
           }
         >
@@ -80,7 +92,16 @@ const AddColor = () => {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Color Hex Code" name="hex">
+          <Form.Item
+            label="Color Hex Code"
+            name="hex"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your hex code!',
+              },
+            ]}
+          >
             <Input type="color" />
           </Form.Item>
         </Form>
@@ -88,7 +109,5 @@ const AddColor = () => {
     </Row>
   );
 };
-
-AddColor.propTypes = {};
 
 export default React.memo(AddColor);
