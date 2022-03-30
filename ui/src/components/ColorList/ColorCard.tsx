@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Space, Typography } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -20,12 +20,10 @@ const ColorCard: React.FC<Props> = ({ item, onOpen }) => {
     refetchQueries: [getAllColors],
   });
 
-  const count = useRef(0);
-
   return (
     <Col xs={22} sm={18} md={12} lg={4}>
       <Card
-        title={item.name + ' ' + count.current++}
+        title={item.name}
         extra={
           <Button
             icon={<DeleteOutlined />}

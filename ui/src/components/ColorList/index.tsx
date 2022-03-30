@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Grid, Spin, Typography } from 'antd';
+import { Row, Grid, Spin, Typography, Empty } from 'antd';
 
 import DeleteModal from './DeleteModal';
 import ColorCard from './ColorCard';
@@ -40,6 +40,7 @@ const ColorList = () => {
   if (!data) return <div>no data</div>;
 
   let colors = data.colors;
+
   return (
     <Row gutter={[16, 16]} justify={!screens.md ? 'center' : undefined}>
       <DeleteModal
@@ -47,10 +48,15 @@ const ColorList = () => {
         itemToDelete={itemToDelete}
         onClose={onClose}
       />
-
-      {colors?.map((item) => (
-        <ColorCard item={item} key={item.name} onOpen={onOpen} />
-      ))}
+      {colors.length === 0 ? (
+        <Row style={{ width: '100%' }} justify="center">
+          <Empty description="Let's add some colors" />
+        </Row>
+      ) : (
+        colors?.map((item) => (
+          <ColorCard item={item} key={item.name} onOpen={onOpen} />
+        ))
+      )}
     </Row>
   );
 };

@@ -62,6 +62,7 @@ const AddColor = () => {
           form={form}
           name="basic"
           layout="vertical"
+          initialValues={{ hex: '#fff' }}
           onFinish={(val) =>
             addColor({ variables: { name: val.name, hex: val.hex } })
           }
