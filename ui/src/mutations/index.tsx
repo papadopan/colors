@@ -9,3 +9,12 @@ export const ADD_NEW_COLOR = gql`
     }
   }
 `;
+export const DELETE_COLOR = gql`
+  mutation DeleteColor($name: String!) {
+    deleteColor(name: $name) {
+      id
+      name
+      hex
+    }
+  }
+`;
