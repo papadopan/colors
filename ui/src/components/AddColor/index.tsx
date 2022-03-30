@@ -5,11 +5,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { ADD_NEW_COLOR } from '../../mutations';
 import { getAllColors } from '../../queries/queries';
-import { ChromePicker } from 'react-color';
 
 const AddColor = () => {
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState('#fff');
   const [form] = Form.useForm();
   const counter = useRef(0);
   const [addColor, { loading, data, error, reset }] = useMutation(
@@ -65,7 +63,7 @@ const AddColor = () => {
           name="basic"
           layout="vertical"
           onFinish={(val) =>
-            addColor({ variables: { name: val.name, hex: val.hex.hex } })
+            addColor({ variables: { name: val.name, hex: val.hex } })
           }
         >
           <Form.Item
@@ -82,10 +80,7 @@ const AddColor = () => {
           </Form.Item>
 
           <Form.Item label="Color Hex Code" name="hex">
-            <ChromePicker
-              color={color}
-              onChange={(color) => setColor(color.hex)}
-            />
+            <Input type="color" />
           </Form.Item>
         </Form>
       </Modal>
