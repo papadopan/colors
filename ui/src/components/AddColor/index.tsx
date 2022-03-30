@@ -1,33 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, Input, Modal, Row } from 'antd';
+import { Button, Form, Input, Modal, notification, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useMutation } from '@apollo/client';
+import { ADD_NEW_COLOR } from '../../mutations';
 
 const AddColor = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
+
+  const [addColor, { loading, data, error }] = useMutation(ADD_NEW_COLOR);
+
+  useEffect(() => {
+    if (data && data.addNewColor) {
+      notification.success({
+        message: 'Color Addition',
+        description: 'color added successfully',
+      });
+      form.resetFields();
+      setVisible(false);
+    }
+  }, [data, error]);
+
   return (
     <Row justify="end" style={{ padding: '10px' }}>
-      <Button onClick={() => setVisible(true)} icon={<PlusOutlined />}>
+      <Button
+        onClick={() => setVisible(true)}
+        icon={<PlusOutlined />}
+        loading={loading}
+      >
         Add Color
       </Button>
       <Modal
         visible={visible}
-        onCancel={() => setVisible(false)}
+        onCancel={() => {
+          setVisible(false);
+          form.resetFields();
+        }}
         title="Add a new Color"
         okText="add"
         okButtonProps={{
           onClick: () => form.submit(),
         }}
+        destroyOnClose
       >
         <Form
           form={form}
           name="basic"
           layout="vertical"
-          onFinish={(val) => console.log(val)}
+          onFinish={(val) => addColor({ variables: val })}
         >
           <Form.Item
-            label="Name"
+            label="Color Name"
             name="name"
             rules={[
               {
@@ -40,7 +64,7 @@ const AddColor = () => {
           </Form.Item>
 
           <Form.Item
-            label="Hex Code"
+            label="Color Hex Code"
             name="hex"
             rules={[
               {
