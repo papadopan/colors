@@ -55,7 +55,14 @@ export class ColorResolver {
 
       return newColor;
     } catch (e) {
-      throw new Error("an error happened while saving to db");
+      if (e instanceof Error) {
+        if (e instanceof PrismaClientKnownRequestError && e.code === "P2002") {
+          throw new Error("This color name already exists in the db");
+        }
+        throw new Error(e.message);
+      } else {
+        throw new Error("there was an error while saving to db");
+      }
     }
   }
 

@@ -18,3 +18,12 @@ export const DELETE_COLOR = gql`
     }
   }
 `;
+export const UPDATE_COLOR = gql`
+  mutation UpdateColor($name: String!, $hex: String!) {
+    updateColor(name: $name, hex: $hex) {
+      id
+      name
+      hex
+    }
+  }
+`;

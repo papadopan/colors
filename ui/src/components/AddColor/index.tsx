@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Input, Modal, notification, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -11,7 +11,7 @@ const AddColor = () => {
   const [visible, setVisible] = useState(false);
   const [color, setColor] = useState('#fff');
   const [form] = Form.useForm();
-
+  const counter = useRef(0);
   const [addColor, { loading, data, error, reset }] = useMutation(
     ADD_NEW_COLOR,
     {
@@ -29,7 +29,14 @@ const AddColor = () => {
       setVisible(false);
       reset();
     }
-  }, [data, error]);
+
+    if (error) {
+      notification.error({
+        message: 'Error while saving to db',
+        description: error.message,
+      });
+    }
+  }, [data, error, form, reset]);
 
   return (
     <Row justify="end" style={{ padding: '10px' }}>
@@ -38,7 +45,7 @@ const AddColor = () => {
         icon={<PlusOutlined />}
         loading={loading}
       >
-        Add Color
+        Add Color {counter.current++}
       </Button>
       <Modal
         visible={visible}
@@ -88,4 +95,4 @@ const AddColor = () => {
 
 AddColor.propTypes = {};
 
-export default AddColor;
+export default React.memo(AddColor);

@@ -7,11 +7,24 @@ import http from "http";
 import { buildSchema } from "type-graphql";
 import { ColorResolver } from "./Resolvers/Color";
 import { Context } from "./types";
+import cors from "cors";
 
 const prisma = new PrismaClient();
 
 async function main() {
   const app = express();
+  app.use(
+    cors({
+      origin: "*",
+      credentials: true,
+    })
+  );
+  // app.use(
+  //   cors({
+  //     origin: "http://localhost:3000",
+  //     credentials: true,
+  //   })
+  // );
   const httpServer = http.createServer(app);
 
   const apolloServer = new ApolloServer({
