@@ -4,6 +4,7 @@ import {  useQuery } from '@apollo/client';
 import { getAllColors } from './queries/queries'
 import { Layout } from 'antd';
 import Header from './components/Header';
+import Content from './components/Content';
 interface Color {
   id: number;
   name: string;
@@ -21,7 +22,7 @@ function App() {
       <Layout.Header>
         <Header/>
       </Layout.Header>
-      <Layout.Content>content</Layout.Content>
+      <Layout.Content><Content/></Layout.Content>
       <Layout.Footer>footer</Layout.Footer>
     </Layout>
   );
