@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Col, Row, Spin, Typography, Grid, Space, Button } from 'antd';
 import { useQuery } from '@apollo/client';
@@ -20,17 +20,22 @@ const ColorList = () => {
   const [visible, setVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState({ name: '', hex: '' });
 
+  const onClose = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
   if (loading) return <Spin />;
 
   if (error) return <Typography.Text>{error.message}</Typography.Text>;
 
   let colors = data?.colors;
+
   return (
     <Row gutter={[16, 16]} justify={!screens.md ? 'center' : undefined}>
       <DeleteModal
         visible={visible}
         itemToDelete={itemToDelete}
-        onClose={() => setVisible(false)}
+        onClose={onClose}
       />
 
       {colors?.map((item) => (
