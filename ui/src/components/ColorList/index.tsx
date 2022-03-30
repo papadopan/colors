@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Col, Row, Spin, Typography, Grid, Space } from 'antd';
+import { Card, Col, Row, Spin, Typography, Grid, Space, Button } from 'antd';
 import { useQuery } from '@apollo/client';
 import { getAllColors } from '../../queries/queries';
+import { DeleteOutlined } from '@ant-design/icons';
+import DeleteModal from './DeleteModal';
 const { useBreakpoint } = Grid;
 interface Color {
   id: number;
@@ -15,6 +17,8 @@ interface ColorData {
 const ColorList = () => {
   const screens = useBreakpoint();
   const { loading, error, data } = useQuery<ColorData, ''>(getAllColors);
+  const [visible, setVisible] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState({ name: '', hex: '' });
 
   if (loading) return <Spin />;
 
@@ -23,9 +27,27 @@ const ColorList = () => {
   let colors = data?.colors;
   return (
     <Row gutter={[16, 16]} justify={!screens.md ? 'center' : undefined}>
+      <DeleteModal
+        visible={visible}
+        itemToDelete={itemToDelete}
+        onClose={() => setVisible(false)}
+      />
+
       {colors?.map((item) => (
         <Col xs={22} sm={18} md={12} lg={4}>
-          <Card title={item.name}>
+          <Card
+            title={item.name}
+            extra={
+              <Button
+                icon={<DeleteOutlined />}
+                danger
+                onClick={() => {
+                  setVisible(true);
+                  setItemToDelete(item);
+                }}
+              />
+            }
+          >
             <Space>
               <div
                 style={{
