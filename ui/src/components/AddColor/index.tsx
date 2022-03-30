@@ -4,12 +4,18 @@ import { Button, Form, Input, Modal, notification, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { ADD_NEW_COLOR } from '../../mutations';
+import { getAllColors } from '../../queries/queries';
 
 const AddColor = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  const [addColor, { loading, data, error }] = useMutation(ADD_NEW_COLOR);
+  const [addColor, { loading, data, error, reset }] = useMutation(
+    ADD_NEW_COLOR,
+    {
+      refetchQueries: [getAllColors],
+    }
+  );
 
   useEffect(() => {
     if (data && data.addNewColor) {
@@ -19,6 +25,7 @@ const AddColor = () => {
       });
       form.resetFields();
       setVisible(false);
+      reset();
     }
   }, [data, error]);
 
