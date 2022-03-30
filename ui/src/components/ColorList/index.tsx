@@ -25,7 +25,7 @@ const ColorList = () => {
     <Row gutter={[16, 16]} justify={!screens.md ? 'center' : undefined}>
       {colors?.map((item) => (
         <Col xs={22} sm={18} md={12} lg={4}>
-          <Card>
+          <Card title={item.name}>
             <Space>
               <div
                 style={{
