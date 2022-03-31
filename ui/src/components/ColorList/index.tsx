@@ -1,40 +1,32 @@
 import React, { useCallback, useState } from 'react';
 
 import { Row, Grid, Spin, Typography, Empty } from 'antd';
-
+import { Color, ColorData } from '../../types';
 import DeleteModal from './DeleteModal';
 import ColorCard from './ColorCard';
 import { useQuery } from '@apollo/client';
 import { getAllColors } from '../../queries/queries';
 const { useBreakpoint } = Grid;
 
-interface ColorBase {
-  name: string;
-  hex: string;
-}
-interface Color extends ColorBase {
-  id: number;
-}
-interface ColorData {
-  colors: Color[];
+interface ColorDataResponse {
+  colors: ColorData[];
 }
 const ColorList = () => {
   const screens = useBreakpoint();
 
   const [visible, setVisible] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<ColorBase | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<Color | null>(null);
   const onClose = useCallback(() => {
     setVisible(false);
-  }, [setVisible]);
+  }, []);
 
-  const onOpen = useCallback(
-    (item: ColorBase) => {
-      setVisible(true);
-      setItemToDelete(item);
-    },
-    [setVisible]
+  const onOpen = useCallback((item: Color) => {
+    setVisible(true);
+    setItemToDelete(item);
+  }, []);
+  const { loading, error, data } = useQuery<ColorDataResponse, void>(
+    getAllColors
   );
-  const { loading, error, data } = useQuery<ColorData, ''>(getAllColors);
 
   if (loading) return <Spin />;
 
@@ -55,10 +47,10 @@ const ColorList = () => {
       )}
       {colors.length === 0 ? (
         <Row style={{ width: '100%' }} justify="center">
-          <Empty description="Let's add some" />
+          <Empty description="Let's add some colors" />
         </Row>
       ) : (
-        colors?.map((item) => (
+        colors.map((item) => (
           <ColorCard item={item} key={item.name} onOpen={onOpen} />
         ))
       )}

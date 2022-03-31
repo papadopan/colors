@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, Space, Typography, notification } from 'antd';
 import { DELETE_COLOR } from '../../mutations';
 import { useMutation } from '@apollo/client';
 import { getAllColors } from '../../queries/queries';
+import { Color } from '../../types';
 interface Props {
   visible: boolean;
-  itemToDelete: deleteItem;
+  itemToDelete: Color;
   onClose: () => void;
 }
-interface deleteItem {
-  name: string;
-  hex: string;
-}
+
 const DeleteModal: React.FC<Props> = ({ visible, itemToDelete, onClose }) => {
   const [deleteColor, { loading, data, error, reset }] = useMutation(
     DELETE_COLOR,
@@ -59,7 +56,5 @@ const DeleteModal: React.FC<Props> = ({ visible, itemToDelete, onClose }) => {
     </Modal>
   );
 };
-
-DeleteModal.propTypes = {};
 
 export default DeleteModal;

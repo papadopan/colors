@@ -19,12 +19,7 @@ async function main() {
       credentials: true,
     })
   );
-  // app.use(
-  //   cors({
-  //     origin: "http://localhost:3000",
-  //     credentials: true,
-  //   })
-  // );
+
   const httpServer = http.createServer(app);
 
   const apolloServer = new ApolloServer({

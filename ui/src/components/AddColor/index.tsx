@@ -4,22 +4,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { ADD_NEW_COLOR } from '../../mutations';
 import { getAllColors } from '../../queries/queries';
-
-interface Color {
-  name: string;
-  hex: string;
-}
-
-interface ColorData {
-  id: number;
-  name: string;
-  hex: string;
-}
+import { ColorData, Color } from '../../types';
 
 interface ColorDataResponse {
   addNewColor: ColorData;
 }
-
 const AddColor: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -110,4 +99,4 @@ const AddColor: React.FC = () => {
   );
 };
 
-export default React.memo(AddColor);
+export default AddColor;

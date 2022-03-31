@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Layout className="__mainLayout__">
       <Layout.Header>
@@ -19,6 +19,6 @@ function App() {
       </Layout.Footer>
     </Layout>
   );
-}
+};
 
 export default App;
